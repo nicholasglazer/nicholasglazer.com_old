@@ -5,6 +5,7 @@ import s from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
 import { useHover, useKeyPress } from '../util/hooks'
 import { MenuBarContext } from '../context/MenuBarContext'
+import { copyToClipboard } from '../util/actions'
 
 const BottomMenuContainer = dynamic(
     () => {
@@ -157,7 +158,7 @@ const Hire = () => {
                           <Text
                             className={`text text-${i}`}
                             style={{cursor: `${i === animArr.length -1 ? 'pointer' : 'default'}`}}
-                            onClick={() => i === animArr.length -1 ? copyToClipboard('glazer.nicholas@gmail.com') : null}
+                            onClick={() => i === animArr.length -1 ? copyToClipboard('glazer.nicholas@gmail.com', setInfoStatus) : null}
                           >
                             {
                                 item.text.split('').map((x,i) => <span key={i} className='letter'>{x}</span>)
