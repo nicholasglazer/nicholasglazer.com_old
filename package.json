@@ -10,6 +10,7 @@
   "dependencies": {
     "@emotion/react": "^11.0.0-next.13",
     "@emotion/styled": "^11.0.0-next.12",
+    "@emotion/css": "^10.0.27",
     "animejs": "^3.2.0",
     "next": "latest",
     "react": "16.13.1",
@@ -18,7 +19,6 @@
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@emotion/babel-plugin": "^11.0.0-next.13",
-    "@emotion/css": "^10.0.27",
     "@emotion/server": "^11.0.0-next.13",
     "@tailwindcssinjs/macro": "^0.7.2",
     "babel-plugin-macros": "^2.8.0",
