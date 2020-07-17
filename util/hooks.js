@@ -29,7 +29,6 @@ export function useKeyPress(targetKey) {
   // If pressed key is our target key then set to true
   function downHandler({ key }) {
     if (key === targetKey) {
-      //console.log('keypressed', key, targetKey)
       setKeyPressed(true)
     }
   }
@@ -37,7 +36,6 @@ export function useKeyPress(targetKey) {
   // If released key is our target key then set to false
   const upHandler = ({ key }) => {
     if (key === targetKey) {
-      console.log('keypressod to false upHandler', key)
       setKeyPressed(false)
     }
   }

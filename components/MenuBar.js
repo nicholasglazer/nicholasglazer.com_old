@@ -1,5 +1,5 @@
 import Router from 'next/router'
-import { useEffect, useState, useContext, useReducer } from 'react'
+import { useRef, useEffect, useState, useContext, useReducer } from 'react'
 import s from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
 import { useKeyPress, useRehydration } from '../util/hooks'
@@ -10,14 +10,17 @@ import anime from 'animejs/lib/anime.min.js'
 const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, setAnimationRestarted}) => {
   // array of keys with actions and description
   const [isToggled, setToggle] = useContext(MenuBarContext)
+  const menuBarRef = useRef()
 
-  useEffect(() => {
-    anime({
-      targets: `.menu-bar`,
-      minHeight: () => isToggled ? [0, 180] : [180, 0],
-      easing: 'easeOutSine',
-    })
-  }, [isToggled, setToggle])
+  // TODO decide if menubar animatiton is needed
+  // useEffect(() => {
+  //   console.log('menuB', menuBarRef.current.offsetHeight && isToggled)
+  //   anime({
+  //     targets: `.menu-bar`,
+  //     minHeight: () => !isToggled ? menuBarRef.current.offsetHeight === 0 ? null : [0, 180] : [180, 0],
+  //     easing: 'easeOutSine',
+  //   })
+  // }, [isToggled, setToggle])
 
   const keysArr = [
     {key: "m", desc: "Send me an email", action: () => sendEmail(setInfoStatus)},
@@ -27,7 +30,7 @@ const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, set
     {key: "h", desc: "Jump to homepage", action: () => Router.push('/')},
     {key: "r", desc: "Restart animation", action: () => restartAnimation(timelineRef, lettersRef, animationFinished, setAnimationRestarted, setInfoStatus)},
     //{key: "e", desc: "Jump to experiments", action: () => Router.push('/experiments')},
-    {key: "p", desc: "Jump to previous page", action: () => Router.back()},
+    {key: "p", desc: "Previous page", action: () => Router.back()},
     {key: "R", desc: "Reload the page", action: () => Router.reload()},
     //{key: "?", desc: "Help", action: () => Router.push('/help')},
     {key: "o", desc: "Open menu bar", action: () => setToggle(!isToggled)}
@@ -47,7 +50,6 @@ const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, set
   const oPressed = useKeyPress('o')
 
   useEffect(() => {
-    console.log('mPRessed', mPressed)
     mPressed ? sendEmail(setInfoStatus) : null
     wPressed ? Router.push('/blog') : null
     gPressed ? openExternalLink() : null
@@ -62,7 +64,7 @@ const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, set
   }, [mPressed, wPressed, gPressed, sPressed, hPressed, rPressed, ePressed, pPressed, RPressed, qmPressed, oPressed])
 
   return (
-    <MenuBarContainer className='menu-bar' isMenu={isToggled}>
+    <MenuBarContainer className='menu-bar' ref={menuBarRef} isMenu={isToggled}>
       {
         keysArr.map((k, i) => {
           return (
@@ -84,7 +86,7 @@ const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, set
   )
 }
 
-const MenuBarContainer = s.div(props => `min-height: ${props.isMenu ? '180px' : 'inherit'};`, `width: fit-content;`, tw` h-0 overflow-hidden text-xs grid xs:grid-cols-2 sm:grid-cols-3 font-main px-3 bg-blackL`)
+const MenuBarContainer = s.div(props => `min-height: ${props.isMenu ? '180px' : 'inherit'};`, `width: fit-content;`, tw` h-0 overflow-hidden text-xs grid xs:grid-cols-2 sm:grid-cols-3 font-main px-3 xs:pr-px bg-blackL`)
 const MenuItem = s.div(tw`flex row-span-1 md:my-1 xs:my-0 sm:my-0 items-center xs:text-xs sm:text-sm`)
 const MenuItemLetter = s.div(tw`text-greenL w-4`)
 const MenuItemArrow = s.div(tw`text-grayL text-lg w-4`)
