@@ -18,8 +18,9 @@
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@emotion/babel-plugin": "^11.0.0-next.13",
-    "babel-plugin-macros": "^2.8.0",
+    "@emotion/server": "^11.0.0-next.13",
     "@tailwindcssinjs/macro": "^0.7.2",
+    "babel-plugin-macros": "^2.8.0",
     "tailwindcss": "1.5.1"
   }
 }
