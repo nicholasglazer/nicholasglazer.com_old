@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
+
 // Hover hook
 export function useHover() {
   const [value, setValue] = useState(false)
@@ -23,34 +24,30 @@ export function useHover() {
   return [ref, value]
 }
 
-export function useKeyPress(targetKey) {
-  const [keyPressed, setKeyPressed] = useState(false)
-
-  // If pressed key is our target key then set to true
-  function downHandler({ key }) {
-    if (key === targetKey) {
-      setKeyPressed(true)
-    }
-  }
-
-  // If released key is our target key then set to false
-  const upHandler = ({ key }) => {
-    if (key === targetKey) {
-      setKeyPressed(false)
-    }
-  }
+// Returns a key when pressed, resets itself to null immediately.
+export function useKeyEvent() {
+  const [lastKey, setLastKey] = useState(null)
 
   useEffect(() => {
+    const downHandler = ({ key, repeat }) => {
+      if (!repeat) {
+        setLastKey(key)
+      }
+    };
+
     window.addEventListener('keydown', downHandler)
-    window.addEventListener('keyup', upHandler)
 
     return () => {
       window.removeEventListener('keydown', downHandler)
-      window.removeEventListener('keyup', upHandler)
     }
   }, [])
 
-  return keyPressed
+  // Doesn't work properly without useEffect.
+  useEffect(() => {
+    setLastKey(null)
+  }, [lastKey])
+
+  return lastKey
 }
 
 export function useLocalStorage(key, initialValue) {

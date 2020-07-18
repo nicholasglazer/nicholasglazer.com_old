@@ -1,14 +1,13 @@
 import Router from 'next/router'
-import { useRef, useEffect, useState, useContext, useReducer } from 'react'
+import { useRef, useEffect, useContext } from 'react'
 import s from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
-import { useKeyPress, useRehydration } from '../util/hooks'
+import { useKeyEvent } from '../util/hooks'
 import { sendEmail, openExternalLink, restartAnimation } from '../util/actions'
 import { MenuBarContext } from '../context/MenuBarContext'
 import anime from 'animejs/lib/anime.min.js'
 
 const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, setAnimationRestarted}) => {
-  // array of keys with actions and description
   const [isToggled, setToggle] = useContext(MenuBarContext)
   const menuBarRef = useRef()
 
@@ -22,6 +21,7 @@ const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, set
   //   })
   // }, [isToggled, setToggle])
 
+  // array of keys with actions and description
   const keysArr = [
     {key: "m", desc: "Send me an email", action: () => sendEmail(setInfoStatus)},
     //{key: "w", desc: "Jump to blog", action: () => Router.push('/blog')},
@@ -35,40 +35,20 @@ const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, set
     //{key: "?", desc: "Help", action: () => Router.push('/help')},
     {key: "o", desc: "Open menu bar", action: () => setToggle(!isToggled)}
   ]
-
-  // register event handlers to know which key is pressed : bool returned
-  const mPressed = useKeyPress('m')
-  const wPressed = useKeyPress('w')
-  const gPressed = useKeyPress('g')
-  const sPressed = useKeyPress('s')
-  const hPressed = useKeyPress('h')
-  const rPressed = useKeyPress('r')
-  const ePressed = useKeyPress('e')
-  const pPressed = useKeyPress('p')
-  const RPressed = useKeyPress('R')
-  const qmPressed = useKeyPress('?')
-  const oPressed = useKeyPress('o')
+  const keyEvent = useKeyEvent()
 
   useEffect(() => {
-    mPressed ? sendEmail(setInfoStatus) : null
-    wPressed ? Router.push('/blog') : null
-    gPressed ? openExternalLink() : null
-    sPressed ? Router.push('/showcase') : null
-    hPressed ? Router.push('/') : null
-    rPressed ? restartAnimation(timelineRef, lettersRef, animationFinished, setAnimationRestarted, setInfoStatus) : null
-    ePressed ? Router.push('/experiments') : null
-    pPressed ? Router.back() : null
-    RPressed ? Router.reload() : null
-    qmPressed ? Router.push('/help') : null
-    oPressed ? setToggle(!isToggled) : null
-  }, [mPressed, wPressed, gPressed, sPressed, hPressed, rPressed, ePressed, pPressed, RPressed, qmPressed, oPressed])
+    const keyDownInfo = keyEvent ? keysArr.find(({key}) => key === keyEvent) : null
+    keyDownInfo && keyDownInfo.action()
+  }, [keyEvent]);
+
 
   return (
     <MenuBarContainer className='menu-bar' ref={menuBarRef} isMenu={isToggled}>
       {
-        keysArr.map((k, i) => {
+        keysArr.map(k => {
           return (
-            <MenuItem key={i} onClick={() => k.action()}>
+            <MenuItem key={k.key} onClick={() => k.action()}>
               <MenuItemLetter>
                 {k.key}
               </MenuItemLetter>
