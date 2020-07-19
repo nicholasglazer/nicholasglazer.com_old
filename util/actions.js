@@ -1,4 +1,3 @@
-
 export const copyToClipboard = async (text, setInfoStatus) => {
     try {
         console.log('copied')

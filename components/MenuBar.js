@@ -1,50 +1,39 @@
 import Router from 'next/router'
-import { useRef, useEffect, useContext } from 'react'
+import { useEffect, useContext } from 'react'
 import s from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
 import { useKeyEvent } from '../util/hooks'
 import { sendEmail, openExternalLink, restartAnimation } from '../util/actions'
 import { MenuBarContext } from '../context/MenuBarContext'
-import anime from 'animejs/lib/anime.min.js'
 
-const MenuBar = ({setInfoStatus, timelineRef, lettersRef, animationFinished, setAnimationRestarted}) => {
+const MenuBar = ({ timelineRef, lettersRef, animationFinished, setAnimationRestarted }) => {
   const [isToggled, setToggle] = useContext(MenuBarContext)
-  const menuBarRef = useRef()
 
-  // TODO decide if menubar animatiton is needed
-  // useEffect(() => {
-  //   console.log('menuB', menuBarRef.current.offsetHeight && isToggled)
-  //   anime({
-  //     targets: `.menu-bar`,
-  //     minHeight: () => !isToggled ? menuBarRef.current.offsetHeight === 0 ? null : [0, 180] : [180, 0],
-  //     easing: 'easeOutSine',
-  //   })
-  // }, [isToggled, setToggle])
-
-  // array of keys with actions and description
+  // array of keys with actions and descriptions
   const keysArr = [
-    {key: "m", desc: "Send me an email", action: () => sendEmail(setInfoStatus)},
+    {key: "m", desc: "Send me an email", action: () => sendEmail()},
     //{key: "w", desc: "Jump to blog", action: () => Router.push('/blog')},
     {key: "g", desc: "See the source code", action: () => openExternalLink()},
-    //{key: "s", desc: "Jump to showcase", action: () => Router.push('/showcase')},
+    {key: "s", desc: "Jump to showcase", action: () => Router.push('/showcase')},
     {key: "h", desc: "Jump to homepage", action: () => Router.push('/')},
-    {key: "r", desc: "Restart animation", action: () => restartAnimation(timelineRef, lettersRef, animationFinished, setAnimationRestarted, setInfoStatus)},
+    {key: "r", desc: "Restart animation", action: () => restartAnimation(timelineRef, lettersRef, animationFinished, setAnimationRestarted)},
     //{key: "e", desc: "Jump to experiments", action: () => Router.push('/experiments')},
     {key: "p", desc: "Previous page", action: () => Router.back()},
     {key: "R", desc: "Reload the page", action: () => Router.reload()},
     //{key: "?", desc: "Help", action: () => Router.push('/help')},
     {key: "o", desc: "Open menu bar", action: () => setToggle(!isToggled)}
   ]
-  const keyEvent = useKeyEvent()
 
+  // useKeyEvent hook
+  // to know which key is pressed
+  const keyEvent = useKeyEvent()
   useEffect(() => {
     const keyDownInfo = keyEvent ? keysArr.find(({key}) => key === keyEvent) : null
     keyDownInfo && keyDownInfo.action()
   }, [keyEvent]);
 
-
   return (
-    <MenuBarContainer className='menu-bar' ref={menuBarRef} isMenu={isToggled}>
+    <MenuBarContainer className='menu-bar' isMenu={isToggled}>
       {
         keysArr.map(k => {
           return (

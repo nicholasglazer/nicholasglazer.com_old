@@ -1,7 +1,17 @@
 import s from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
+import { useInfoStatus } from '../util/hooks'
+import { useEffect } from 'react'
 
-const InfoBar = ({infoStatus}) => {
+const InfoBar = () => {
+    const [infoStatus, setInfoStatus] = useInfoStatus()
+    // useEffect(() => {
+    // }, [infoStatus, setInfoStatus]);
+    //console.log('setinfostatus BAR', setInfoStatus)
+    //useEffect(() => {
+    console.log('infostatus BAR', infoStatus)
+    //}, [infoStatus]);
+
     return (
         <InfoBarContainer>
           <InfoBarStatus>{infoStatus}</InfoBarStatus>

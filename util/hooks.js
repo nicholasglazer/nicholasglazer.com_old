@@ -84,3 +84,15 @@ export function useLocalStorage(key, initialValue) {
 
   return [storedValue, setValue]
 }
+
+// TODO possible to avoid useContext?
+export function useInfoStatus() {
+  const [infoStatus, setInfoStatus] = useState(null)
+  const setValue = value => {
+    //const delay = setTimeout(() => setInfoStatus(''), 3200)
+    console.log('settvalu in hook: ', value)
+    setInfoStatus(value)
+    //return () => clearTimeout(delay)
+  }
+  return [infoStatus, setValue]
+}

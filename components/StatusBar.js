@@ -1,27 +1,46 @@
-import { useContext } from 'react'
+import { useContext, useEffect, useRef } from 'react'
 import s from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
 import { toggleMenu, restartAnimation, sendEmail } from '../util/actions'
+import { useHover, useInfoStatus } from '../util/hooks'
 import Router from 'next/router'
 import { MenuBarContext } from '../context/MenuBarContext'
 
-const StatusBar = ({statusBarRef, verticalRef, circleRef, homePathRef, pathRef, progressRef, menuRef,
-                    animationFinished, setAnimationRestarted, animationProgress,
-                    timelineRef, lettersRef, setInfoStatus, isAnimationFinished}) => {
+const StatusBar = ({ animationFinished, setAnimationRestarted, animationProgress, timelineRef, lettersRef, isAnimationFinished }) => {
 
-                      const [isToggled, setToggle] = useContext(MenuBarContext)
+  const [isToggled, setToggle] = useContext(MenuBarContext)
 
-                      return (
-                        <StatusBarContainer ref={statusBarRef} className='status-bar'>
-                          <BarVerticalLine ref={verticalRef} />
-                          <BarCircle ref={circleRef} isAnimationFinished={animationFinished} value='Restart the animation' onClick={() => restartAnimation(timelineRef, lettersRef, animationFinished, setAnimationRestarted, setInfoStatus)} />
-                          <BarHomePath ref={homePathRef} value='Move to : https://nicholasglazer.com' onClick={() => Router.push('/')}>nicholasglazer</BarHomePath>
-                          <BarPath ref={pathRef} value='Use default client to send me an email' onClick={() => sendEmail(setInfoStatus)}>/hire</BarPath>
-                          <BarProgress ref={progressRef} value='Progress stage'>{animationProgress}</BarProgress>
-                          <BarMenu ref={menuRef} value='Open menu bar' onClick={() => setToggle(!isToggled)}>Menu</BarMenu>
-                        </StatusBarContainer>
-                      )
-                    }
+  //const [infoStatus, setInfoStatus] = useInfoStatus()
+
+  // useHover hooks
+  const [pathRef, isPathHovered] = useHover()
+  const [menuRef, isMenuHovered] = useHover()
+  const [circleRef, isCircleHovered] = useHover()
+  const [homePathRef, isHomePathHovered] = useHover()
+  const [progressRef, isProgressHovered] = useHover()
+  const [verticalRef, isVerticalHovered] = useHover()
+
+  // useEffect(() => {
+  //   isPathHovered ? setInfoStatus(pathRef.current.value) : null
+  //   isMenuHovered ? setInfoStatus(menuRef.current.value) : null
+  //   isCircleHovered ? setInfoStatus(circleRef.current.value) : null
+  //   isHomePathHovered ? setInfoStatus(homePathRef.current.value) : null
+  //   isProgressHovered ? setInfoStatus(progressRef.current.value) : null
+  // }, [isCircleHovered, isPathHovered, isHomePathHovered, isProgressHovered, isMenuHovered])
+
+
+  return (
+    <StatusBarContainer className='status-bar'>
+          <button onClick={() => setInfoStatus('ps')}>btn</button>
+      <BarVerticalLine />
+      <BarCircle ref={circleRef} isAnimationFinished={animationFinished} value='Restart the animation' onClick={() => restartAnimation(timelineRef, lettersRef, animationFinished, setAnimationRestarted)} />
+      <BarHomePath ref={homePathRef} value='Move to : https://nicholasglazer.com' onClick={() => Router.push('/')}>nicholasglazer</BarHomePath>
+      <BarPath ref={pathRef} value='Use default client to send me an email' onClick={() => sendEmail()}>/hire</BarPath>
+      <BarProgress ref={progressRef} value='Progress stage'>{animationProgress}</BarProgress>
+      <BarMenu ref={menuRef} value='Open menu bar' onClick={() => setToggle(!isToggled)}>Menu</BarMenu>
+    </StatusBarContainer>
+  )
+}
 
 const StatusBarContainer = s.div(tw`flex flex-initial text-base items-center bg-blackD border-b border-grayD`)
 const BarProgress = s.data(tw`text-textColor flex justify-end pl-4 sm:pl-6 mr-auto font-mono`)

@@ -1,11 +1,11 @@
 import dynamic from "next/dynamic"
-import { useState, useEffect, useLayoutEffect, useRef, useContext } from 'react'
+import { useState, useEffect, useRef, useContext } from 'react'
 import anime from 'animejs/lib/anime.min.js'
 import s from '@emotion/styled'
 import tw from '@tailwindcssinjs/macro'
-import { useHover, useKeyPress } from '../util/hooks'
 import { MenuBarContext } from '../context/MenuBarContext'
 import { copyToClipboard } from '../util/actions'
+import { useInfoStatus } from '../util/hooks'
 
 const BottomMenuContainer = dynamic(
     () => {
@@ -22,45 +22,16 @@ const Hire = () => {
         {text: "Contact me at glazer.nicholas@gmail.com", time: 5700},
     ]
 
+    const [isToggle, setToggle] = useContext(MenuBarContext)
+    const [infoStatus, setInfoStatus] = useInfoStatus()
+
     const timelineRef = useRef(null)
     const lettersRef = useRef(null)
-    const statusBarRef = useRef(null)
-    const menuBar = useRef(null)
-    // useState hooks
-    const [infoStatus, setInfoStatus] = useState('Bottom bar is clickable!')
-    const [isMenuToggled, setMenuToggled] = useState(0);
 
+    // useState hooks
     const [animationProgress, setAnimationProgress] = useState('0%')
     const [animationFinished, setAnimationFinished] = useState(false)
-    const [animationRestarted, setAnimationRestarted] = useState(false);
-
-    // useHover hooks
-    const [pathRef, isPathHovered] = useHover()
-    const [menuRef, isMenuHovered] = useHover()
-    const [circleRef, isCircleHovered] = useHover()
-    const [homePathRef, isHomePathHovered] = useHover()
-    const [progressRef, isProgressHovered] = useHover()
-    const [verticalRef, isVerticalHovered] = useHover()
-    const [emailRef, isEmailHovered] = useHover()
-
-
-    const [isToggle, setToggle] = useContext(MenuBarContext)
-
-
-    // bottom info text refs
-    useLayoutEffect(() => {
-        const delay = setTimeout(() => setInfoStatus(''), 3200)
-
-        isPathHovered ? setInfoStatus(pathRef.current.value) : delay
-        isMenuHovered ? setInfoStatus(menuRef.current.value) : delay
-        isCircleHovered ? setInfoStatus(circleRef.current.value) : delay
-        isHomePathHovered ? setInfoStatus(homePathRef.current.value) : delay
-        isProgressHovered ? setInfoStatus(progressRef.current.value) : delay
-        isVerticalHovered ? setInfoStatus(verticalRef.current.value) : delay
-        isEmailHovered ? setInfoStatus(emailRef.current.value) : delay
-
-        return () => clearTimeout(delay)
-    }, [isCircleHovered, isPathHovered, isHomePathHovered, isProgressHovered, isMenuHovered, isVerticalHovered, isEmailHovered])
+    const [animationRestarted, setAnimationRestarted] = useState(false)
 
     useEffect(() => {
         // Letters animation
@@ -72,18 +43,15 @@ const Hire = () => {
             duration: 1,
             delay: anime.stagger(60),
             update: (anim) => {
-                //    console.log('animationFinished, restarted', animationFinished, animationRestarted)
                 setAnimationProgress(`${Math.round(anim.progress)}%`)
             },
             begin: (anim) => {
                 setAnimationFinished(false)
                 setAnimationRestarted(false)
-                //console.log('began : ' + anim.began)
             },
             complete: (anim) => {
                 setAnimationFinished(true)
                 setAnimationRestarted(false)
-                console.log('completed menu: ', isToggle )
                 !isToggle ? setToggle(true) : null
             }
         })
@@ -153,7 +121,7 @@ const Hire = () => {
                         <PositionNumber className={`num-${i}`}>{i + 1}</PositionNumber>
                       </NumbersWrapper>
                       <h2>
-                        <TextWrapper className={`text-wrapper-${i}`} ref={emailRef} value='hi'>
+                        <TextWrapper className={`text-wrapper-${i}`}>
                           <Cursor style={{width: '2px'}} className={`cursor cursor-${i}`}/>
                           <Text
                             className={`text text-${i}`}
@@ -171,18 +139,9 @@ const Hire = () => {
             }
           </UpperContainer>
           <BottomMenuContainer
-            statusBarRef={statusBarRef}
-            verticalRef={verticalRef}
-            circleRef={circleRef}
-            homePathRef={homePathRef}
-            pathRef={pathRef}
-            progressRef={progressRef}
-            menuRef={menuRef}
             animationFinished={animationFinished}
             animationProgress={animationProgress}
             setAnimationRestarted={setAnimationRestarted}
-            setInfoStatus={setInfoStatus}
-            infoStatus={infoStatus}
             timelineRef={timelineRef}
             lettersRef={lettersRef}
           />
