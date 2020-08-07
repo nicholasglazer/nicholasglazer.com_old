@@ -20,6 +20,7 @@ const StatusBar = ({ animationFinished, setAnimationRestarted, animationProgress
   const [progressRef, isProgressHovered] = useHover()
   const [verticalRef, isVerticalHovered] = useHover()
 
+  // TODO value without use. Do the refactoring
   // useEffect(() => {
   //   isPathHovered ? setInfoStatus(pathRef.current.value) : null
   //   isMenuHovered ? setInfoStatus(menuRef.current.value) : null

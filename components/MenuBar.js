@@ -21,7 +21,7 @@ const MenuBar = ({ timelineRef, lettersRef, animationFinished, setAnimationResta
     {key: "p", desc: "Previous page", action: () => Router.back()},
     {key: "R", desc: "Reload the page", action: () => Router.reload()},
     //{key: "?", desc: "Help", action: () => Router.push('/help')},
-    {key: "o", desc: "Open menu bar", action: () => setToggle(!isToggled)}
+    {key: "o", desc: "Toggle menu bar", action: () => setToggle(!isToggled)}
   ]
 
   // useKeyEvent hook
