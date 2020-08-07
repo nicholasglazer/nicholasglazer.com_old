@@ -31,7 +31,6 @@ const StatusBar = ({ animationFinished, setAnimationRestarted, animationProgress
 
   return (
     <StatusBarContainer className='status-bar'>
-          <button onClick={() => setInfoStatus('ps')}>btn</button>
       <BarVerticalLine />
       <BarCircle ref={circleRef} isAnimationFinished={animationFinished} value='Restart the animation' onClick={() => restartAnimation(timelineRef, lettersRef, animationFinished, setAnimationRestarted)} />
       <BarHomePath ref={homePathRef} value='Move to : https://nicholasglazer.com' onClick={() => Router.push('/')}>nicholasglazer</BarHomePath>
